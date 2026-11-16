@@ -269,17 +269,16 @@
 <div id="loading">DONG-TER-UNO</div>
 
 <script>
-  // 若 CDN 拉不下来，给一句可操作的提示，而不是白屏。
+  // three 加载失败时给一句可操作的提示，而不是白屏。
   window.__DTU_BOOT = false;
   window.__DTU_CDN_FAIL = false;
   window.__dtuFallback = function () {
     if (window.__DTU_BOOT) return;
     document.getElementById('loading').innerHTML =
       '<div id="loadfallback">THREE.JS 没有加载成功\n\n' +
-      '1) 确认能访问 unpkg.com 或 cdn.jsdelivr.net\n' +
-      '2) 或把下方 &lt;script src="…three.min.js"&gt; 换成本地文件，例如\n' +
-      '   ../dong-ter-uno宇航员/node_modules/three/build/three.min.js\n' +
-      '3) 注意：本页用的是 UMD 版 three，双击 file:// 打开也能跑</div>';
+      '1) 确认 vendor/three.min.js 还在（仓库里自带，不依赖网络）\n' +
+      '2) 若把 index.html 单独拷走了，需要连同 vendor/ 一起带走\n' +
+      '3) 找不到本地文件时会退回 unpkg / jsdelivr</div>';
   };
   window.setTimeout(function () {
     if (window.__DTU_BOOT || window.__DTU_CDN_FAIL) return;
@@ -287,11 +286,14 @@
   }, 9000);
 </script>
 
-<!-- UMD 版 Three.js：classic script，双击 file:// 打开也能直接跑 -->
-<script src="https://unpkg.com/three@0.159.0/build/three.min.js"
-        onerror="window.__DTU_CDN_FAIL = true;"></script>
+<!-- UMD 版 Three.js：仓库自带 vendor/three.min.js，不联网也能跑；万一缺失再退回 CDN -->
+<script src="vendor/three.min.js" onerror="window.__DTU_LOCAL_MISSING = true;"></script>
 <script>
-  // unpkg 不通时自动换 jsdelivr（document.write 在解析期同步插入，保证下面的代码能拿到 THREE）
+  if (!window.THREE) {
+    document.write('<script src="https://unpkg.com/three@0.159.0/build/three.min.js"><\/script>');
+  }
+</script>
+<script>
   if (!window.THREE) {
     document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"><\/script>');
   }

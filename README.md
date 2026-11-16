@@ -4,7 +4,9 @@
 
 ## 运行
 
-双击 `index.html` 即可（用的是 UMD 版 three，`file://` 直接开也能跑，不需要构建工具）。
+双击 `index.html` 即可（用的是 UMD 版 three，`file://` 直接开也能跑，不需要构建工具，也不需要联网）。
+
+three.js 已经放进仓库：`vendor/three.min.js`（r159 UMD）。浏览器断网也能完整运行；万一 `vendor/` 被漏拷，会自动退回 unpkg / jsdelivr。
 
 ## 玩法
 
@@ -32,6 +34,6 @@ URL 加 `?k=12` 可以直接打开第 12 个知识点。
 
 ## 说明
 
-- three.js 通过 unpkg 的 CDN 引入（UMD 版 r159），unpkg 不通时会自动切 jsdelivr。
+- three.js 走 `vendor/three.min.js`（仓库自带，离线可用），缺失时才回退到 unpkg / jsdelivr。
 - 地球是程序化 shader（大陆 / 云层 / 冰盖 / 夜面灯光），不依赖贴图。
 - `preview.png` 是实机截图。
